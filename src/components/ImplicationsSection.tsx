@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, TrendingDown, Calendar, DollarSign } from 'lucide-react';
+import { AlertTriangle, TrendingDown, Calendar, DollarSign, Target } from 'lucide-react';
 import { useInView } from '../hooks/useInView';
 
 interface ImplicationsSectionProps {
@@ -8,19 +8,28 @@ interface ImplicationsSectionProps {
 
 export const ImplicationsSection: React.FC<ImplicationsSectionProps> = ({ isDarkMode }) => {
   const [sectionRef, isInView] = useInView({ threshold: 0.3 });
-  const [animationStep, setAnimationStep] = useState(0);
+  const [lossValue, setLossValue] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (isInView) {
-      const timer1 = setTimeout(() => setAnimationStep(1), 500);
-      const timer2 = setTimeout(() => setAnimationStep(2), 1500);
-      const timer3 = setTimeout(() => setAnimationStep(3), 2500);
-      
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
+      setIsAnimating(true);
+      let startTime: number;
+      const targetValue = 126000;
+      const duration = 2000;
+
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        
+        setLossValue(Math.floor(progress * targetValue));
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
       };
+
+      requestAnimationFrame(animate);
     }
   }, [isInView]);
 
@@ -34,7 +43,7 @@ export const ImplicationsSection: React.FC<ImplicationsSectionProps> = ({ isDark
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <AlertTriangle className={`w-16 h-16 mx-auto mb-6 ${
-            animationStep >= 1 ? 'animate-bounce text-red-500' : 'text-gray-400'
+            isAnimating ? 'animate-bounce text-red-500' : 'text-gray-400'
           } transition-colors duration-500`} />
           
           <h2 className="text-4xl md:text-6xl font-bold mb-6">
@@ -49,50 +58,18 @@ export const ImplicationsSection: React.FC<ImplicationsSectionProps> = ({ isDark
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Animation Side */}
           <div className="relative h-96 flex items-center justify-center">
-            <div className="relative">
-              {/* Price Tag Shattering */}
-              <div className={`absolute inset-0 flex items-center justify-center transition-all duration-1000 ${
-                animationStep >= 1 ? 'opacity-0 scale-150' : 'opacity-100 scale-100'
-              }`}>
-                <div className={`w-32 h-20 rounded-lg flex items-center justify-center font-bold text-xl ${
-                  isDarkMode ? 'bg-green-600 text-white' : 'bg-green-500 text-white'
-                }`}>
-                  R$ 299
+            <div className={`relative w-64 h-64 rounded-full border-8 flex items-center justify-center ${
+              isDarkMode ? 'border-red-600 bg-red-900/20' : 'border-red-500 bg-red-100'
+            } ${isAnimating ? 'animate-pulse' : ''}`}>
+              <div className="text-center">
+                <Target className="w-16 h-16 text-red-500 mx-auto mb-4" />
+                <div className="text-3xl font-bold text-red-500">
+                  R$ {lossValue.toLocaleString('pt-BR')}
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                  perdidos por mês
                 </div>
               </div>
-
-              {/* Shattered pieces */}
-              {animationStep >= 1 && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  {[...Array(6)].map((_, i) => (
-                    <div
-                      key={i}
-                      className={`absolute w-8 h-6 bg-red-500 rounded animate-ping ${
-                        isDarkMode ? 'bg-red-600' : 'bg-red-500'
-                      }`}
-                      style={{
-                        transform: `translate(${(i % 3 - 1) * 60}px, ${Math.floor(i / 3) * 40 - 20}px)`,
-                        animationDelay: `${i * 0.1}s`,
-                        animationDuration: '2s'
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Graph turning red */}
-              {animationStep >= 2 && (
-                <div className="absolute -bottom-20 left-1/2 transform -translate-x-1/2">
-                  <TrendingDown className="w-16 h-16 text-red-500 animate-pulse" />
-                </div>
-              )}
-
-              {/* Calendar burning */}
-              {animationStep >= 3 && (
-                <div className="absolute -top-20 left-1/2 transform -translate-x-1/2">
-                  <Calendar className="w-16 h-16 text-orange-500 animate-bounce" />
-                </div>
-              )}
             </div>
           </div>
 
@@ -106,15 +83,15 @@ export const ImplicationsSection: React.FC<ImplicationsSectionProps> = ({ isDark
               <div className="space-y-3">
                 <div className="flex justify-between">
                   <span>Loja R$ 500k/mês:</span>
-                  <span className="font-bold text-red-500">-R$ 126k/ano</span>
+                  <span className="font-bold text-red-500">-R$ 75k/ano</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Loja R$ 1M/mês:</span>
-                  <span className="font-bold text-red-500">-R$ 252k/ano</span>
+                  <span className="font-bold text-red-500">-R$ 150k/ano</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Loja R$ 5M/mês:</span>
-                  <span className="font-bold text-red-500">-R$ 1.26M/ano</span>
+                  <span className="font-bold text-red-500">-R$ 750k/ano</span>
                 </div>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">

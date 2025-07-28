@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ isDarkMode, toggleDarkMode }) =>
         <div className="flex items-center space-x-2">
           <Bot className="w-8 h-8 text-purple-600" />
           <span className="text-xl font-bold bg-gradient-to-r from-purple-600 to-green-600 bg-clip-text text-transparent">
-            PriceBot AI
+            SmartMarket
           </span>
         </div>
         

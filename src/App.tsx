@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import { SituationSection } from './components/SituationSection';
 import { ProblemSection } from './components/ProblemSection';
 import { ImplicationsSection } from './components/ImplicationsSection';
+import { SolutionIntroSection } from './components/SolutionIntroSection';
 import { NeedPayoffSection } from './components/NeedPayoffSection';
 import { CTASection } from './components/CTASection';
 import { SocialProofSection } from './components/SocialProofSection';
@@ -26,6 +27,7 @@ function App() {
         <SituationSection isDarkMode={isDarkMode} />
         <ProblemSection isDarkMode={isDarkMode} />
         <ImplicationsSection isDarkMode={isDarkMode} />
+        <SolutionIntroSection isDarkMode={isDarkMode} />
         <NeedPayoffSection isDarkMode={isDarkMode} />
         <CTASection isDarkMode={isDarkMode} />
         <SocialProofSection isDarkMode={isDarkMode} />

@@ -84,7 +84,7 @@ export const FloatingChat: React.FC<FloatingChatProps> = ({ isDarkMode }) => {
             <div className="flex items-center">
               <Bot className="w-6 h-6 text-white mr-2" />
               <div>
-                <h3 className="font-semibold text-white">PriceBot AI</h3>
+                <h3 className="font-semibold text-white">SmartMarket</h3>
                 <p className="text-xs text-purple-200">Online agora</p>
               </div>
             </div>
